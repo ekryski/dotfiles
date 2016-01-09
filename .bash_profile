@@ -5,15 +5,31 @@
 # @see .inputrc
 #
 
-# Nicer prompt.
-export PS1=" \D{%I:%M %p}:\w $ "
+# Nicer prompt. Looks like this:
+# <username> : <current directory> (<git branch>)
+export PS1="\[\033[01;30m\]\u : \[\033[01;34m\]\W\[\033[m\] \[\033[31m\]\$(parse_git_branch) \[\033[00m\]\$ "
 
 # Use colors.
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # Custom $PATH with extra locations.
-export PATH=/usr/local/bin:/Users/ekryski/bin:/usr/local/sbin:/usr/local/git/bin:/Developer/Eclipse/android-sdk-macosx/platform-tools:/Developer/Eclipse/android-sdk-macosx/tools:$PATH
+export PATH=/usr/local/bin:/Users/ekryski/bin:/usr/local/sbin:/usr/local/git/bin:$PATH
+
+# GO Lang Paths
+export GOPATH=$HOME/Development/go
+export PATH=$PATH:$GOPATH/bin
+
+# Android Development Paths
+export PATH=$PATH:/Developer/Eclipse/android-sdk-macosx/platform-tools:/Developer/Eclipse/android-sdk-macosx/tools
+
+# Load RVM into shell session
+export PATH="$HOME/.rvm/bin:$PATH"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+
+# Load NVM into shell session
+export NVM_DIR=$HOME/.nvm
+source $(brew --prefix nvm)/nvm.sh  # This loads NVM into a shell session.
 
 # Flush DNS cache (See: http://support.apple.com/kb/ht5343).
 alias flush-dns='sudo killall -HUP mDNSResponder'
@@ -66,11 +82,16 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
 fi
 
+# Make Ruby go faster
+# https://gist.github.com/jjb/7389552
+export RUBY_HEAP_MIN_SLOTS=500000
+export RUBY_HEAP_SLOTS_INCREMENT=250000 # not available in MRI
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+export RUBY_GC_MALLOC_LIMIT=50000000
+export RUBY_FREE_MIN=100000 # deprecated in Ruby 2.1
+
 # Vagrant configuration.
 # export VAGRANT_DEFAULT_PROVIDER='virtualbox'
-
-# Disable cowsay in Ansible.
-export ANSIBLE_NOCOWS=1
 
 # Ansible aliases.
 alias an='ansible'
