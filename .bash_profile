@@ -84,11 +84,11 @@ fi
 
 # Make Ruby go faster
 # https://gist.github.com/ekryski/3ab7d82505684ecbb891
-export RUBY_HEAP_MIN_SLOTS=500000
-export RUBY_HEAP_SLOTS_INCREMENT=250000 # not available in MRI
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+export RUBY_GC_HEAP_INIT_SLOTS=500000
+export RUBY_GS_HEAP_SLOTS_INCREMENT=250000 # not available in MRI
+export RUBY_GC_HEAP_SLOTS_GROWTH_FACTOR=1
 export RUBY_GC_MALLOC_LIMIT=50000000
-export RUBY_FREE_MIN=100000 # deprecated in Ruby 2.1
+export RUBY_GC_HEAP_FREE_SLOTS=100000 # deprecated in Ruby 2.1
 
 # Vagrant configuration.
 # export VAGRANT_DEFAULT_PROVIDER='virtualbox'
