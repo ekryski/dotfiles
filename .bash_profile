@@ -83,7 +83,7 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
 fi
 
 # Make Ruby go faster
-# https://gist.github.com/jjb/7389552
+# https://gist.github.com/ekryski/3ab7d82505684ecbb891
 export RUBY_HEAP_MIN_SLOTS=500000
 export RUBY_HEAP_SLOTS_INCREMENT=250000 # not available in MRI
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
