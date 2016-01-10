@@ -46,6 +46,11 @@ then
   source ~/.bashrc
 fi
 
+# Parse git branch to show in customized prompt
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
 # Route local traffic over ethernet when using certain WiFi networks w/o proxy.
 function route_add() {
   sudo route add -net 10.0.0.0/8 -interface en0
