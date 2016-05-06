@@ -16,23 +16,38 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 # Custom $PATH with extra locations.
 export PATH=/usr/local/bin:/Users/ekryski/bin:/usr/local/sbin:/usr/local/git/bin:$PATH
 
+# ------------------------------------
 # GO Lang Paths
+# ------------------------------------
 export GOPATH=$HOME/Development/go
 export PATH=$PATH:$GOPATH/bin
 
+# ------------------------------------
 # Android Development Paths
-export PATH=$PATH:/Developer/Eclipse/android-sdk-macosx/platform-tools:/Developer/Eclipse/android-sdk-macosx/tools
+# ------------------------------------
+export ANDROID_HOME=/usr/local/opt/android-sdk
 
+# ------------------------------------
 # Load RVM into shell session
+# ------------------------------------
 export PATH="$HOME/.rvm/bin:$PATH"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
 
+# ------------------------------------
+# Make Ruby go faster
+# https://gist.github.com/ekryski/3ab7d82505684ecbb891
+# ------------------------------------
+export RUBY_GC_HEAP_INIT_SLOTS=500000
+export RUBY_GS_HEAP_SLOTS_INCREMENT=250000 # not available in MRI
+export RUBY_GC_HEAP_SLOTS_GROWTH_FACTOR=1
+export RUBY_GC_MALLOC_LIMIT=50000000
+export RUBY_GC_HEAP_FREE_SLOTS=100000 # deprecated in Ruby 2.1
+
+# ------------------------------------
 # Load NVM into shell session
+# ------------------------------------
 export NVM_DIR=$HOME/.nvm
 source $(brew --prefix nvm)/nvm.sh  # This loads NVM into a shell session.
-
-# Flush DNS cache (See: http://support.apple.com/kb/ht5343).
-alias flush-dns='sudo killall -HUP mDNSResponder'
 
 # Include alias file (if present) containing aliases for ssh, etc.
 if [ -f ~/.bash_aliases ]
@@ -46,34 +61,10 @@ then
   source ~/.bashrc
 fi
 
-# Parse git branch to show in customized prompt
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
 
-# Route local traffic over ethernet when using certain WiFi networks w/o proxy.
-function route_add() {
-  sudo route add -net 10.0.0.0/8 -interface en0
-}
-
-# Delete the route added above.
-function route_delete() {
-  sudo route delete 10.0.0.0
-}
-
-# Route IRC traffic through one of my servers.
-# Use SOCKS5 settings 'localhost' and 6667 for server/port.
-function irc_proxy() {
-  ssh -vD 6667 geerlingguy@atl1.servercheck.in
-}
-
-# Syntax-highlight code for copying and pasting.
-# Requires highlight (`brew install highlight`).
-function pretty() {
-  pbpaste | highlight --syntax=$1 -O rtf | pbcopy
-}
-
+# ------------------------------------
 # Git aliases.
+# ------------------------------------
 alias gs='git status'
 alias gc='git commit'
 alias gp='git pull --rebase'
@@ -87,20 +78,83 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
 fi
 
-# Make Ruby go faster
-# https://gist.github.com/ekryski/3ab7d82505684ecbb891
-export RUBY_GC_HEAP_INIT_SLOTS=500000
-export RUBY_GS_HEAP_SLOTS_INCREMENT=250000 # not available in MRI
-export RUBY_GC_HEAP_SLOTS_GROWTH_FACTOR=1
-export RUBY_GC_MALLOC_LIMIT=50000000
-export RUBY_GC_HEAP_FREE_SLOTS=100000 # deprecated in Ruby 2.1
+# Parse git branch to show in customized prompt
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+
+# ------------------------------------
+# Ansible aliases.
+# ------------------------------------
+
+alias an='ansible'
+alias ap='ansible-playbook'
 
 # Vagrant configuration.
 # export VAGRANT_DEFAULT_PROVIDER='virtualbox'
 
-# Ansible aliases.
-alias an='ansible'
-alias ap='ansible-playbook'
+# ------------------------------------
+# Docker aliases and function
+# ------------------------------------
+
+# Get latest container ID
+alias dl="docker ps -l -q"
+# Get container process
+alias dps="docker ps"
+# Get process included stop container
+alias dpa="docker ps -a"
+# Get images
+alias di="docker images"
+# Get container IP
+alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+# Run deamonized container, e.g., $dkd base /bin/echo hello
+alias dkd="docker run -d -P"
+# Run interactive container, e.g., $dki base /bin/bash
+alias dki="docker run -i -t -P"
+# Execute interactive container, e.g., $dex base /bin/bash
+alias dex="docker exec -i -t"
+# Stop all containers
+dstop() { docker stop $(docker ps -a -q); }
+# Remove all containers
+drm() { docker rm $(docker ps -a -q); }
+# Stop and Remove all containers
+alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+# Remove all images
+dri() { docker rmi $(docker images -q); }
+# Dockerfile build, e.g., $dbu tcnksm/test 
+dbu() { docker build -t=$1 .; }
+# Show all alias related docker
+dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
+
+
+# ------------------------------------
+# Networking
+# ------------------------------------
+
+# Route local traffic over ethernet when using certain WiFi networks w/o proxy.
+function route_add() {
+  sudo route add -net 10.0.0.0/8 -interface en0
+}
+
+# Delete the route added above.
+function route_delete() {
+  sudo route delete 10.0.0.0
+}
+
+
+# ------------------------------------
+# Generic Commands
+# ------------------------------------
+
+# Flush DNS cache (See: http://support.apple.com/kb/ht5343).
+alias flush-dns='sudo killall -HUP mDNSResponder'
+
+# Syntax-highlight code for copying and pasting.
+# Requires highlight (`brew install highlight`).
+function pretty() {
+  pbpaste | highlight --syntax=$1 -O rtf | pbcopy
+}
 
 # Ask for confirmation when 'prod' is in a command string.
 prod_command_trap () {
