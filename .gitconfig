@@ -2,8 +2,8 @@
   name = Eric Kryski
   email = e.kryski@gmail.com
 [core]
-  editor = vi
-  excludesfile = ~/.gitignore
+  editor = code
+  excludesfile = ~/.gitignore_global
 [color]
   branch = auto
   diff = auto
@@ -13,18 +13,25 @@
   browser = google-chrome
 [credential]
   helper = osxkeychain
+[heroku]
+  account = personal
 [push]
   default = simple
 [merge]
   tool = kdiff3
-[difftool]
-  prompt = false
+[diff]
+  tool = default-difftool
+[difftool "default-difftool"]
+  cmd = code --wait --diff $LOCAL $REMOTE
 [alias]
-  st = status
+  br = branch
   c = commit
+  co = checkout
   ca = commit -a
   cm = commit -m
   cam = commit -am
   d = diff
   dc = diff --cached
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   l = log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
+  st = status
