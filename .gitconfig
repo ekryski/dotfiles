@@ -16,7 +16,7 @@
 [heroku]
   account = personal
 [push]
-  default = simple
+  default = current
 [merge]
   tool = kdiff3
 [diff]
