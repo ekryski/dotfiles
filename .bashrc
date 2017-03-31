@@ -33,10 +33,25 @@ export PATH=$PATH:$GOPATH/bin
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
 # ------------------------------------
-# Load RVM into shell session
+# Virtualenv Wrapper
+# 
+# This loads Virtualenv wrapper into a shell session. 
 # ------------------------------------
-export PATH="$HOME/.rvm/bin:$PATH"
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+source /usr/local/bin/virtualenvwrapper.sh
+
+# ------------------------------------
+# Load NVM into shell session
+# ------------------------------------
+export NVM_DIR=$HOME/.nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads NVM into a shell session.
+
+# ------------------------------------
+# Postgres
+# ------------------------------------
+export PATH="/Applications/Postgres.app/Contents/MacOS/bin:$PATH"
+
+# Adding local dir /bin dir to last in chain
+export PATH="./bin:$PATH"
 
 # ------------------------------------
 # Make Ruby go faster
@@ -49,30 +64,12 @@ export RUBY_GC_MALLOC_LIMIT=50000000
 export RUBY_GC_HEAP_FREE_SLOTS=100000 # deprecated in Ruby 2.1
 
 # ------------------------------------
-# Virtualenv Wrapper
-# 
-# This loads Virtualenv wrapper into a shell session. 
+# Load RVM into shell session
 # ------------------------------------
-source /usr/local/bin/virtualenvwrapper.sh
+export PATH="$HOME/.rvm/bin:$PATH"
 
-# ------------------------------------
-# Load NVM into shell session
-# ------------------------------------
-export NVM_DIR=$HOME/.nvm
-source $(brew --prefix nvm)/nvm.sh  # This loads NVM into a shell session.
-
-# ------------------------------------
-# YARN
-# ------------------------------------
-export PATH="$HOME/.yarn/bin:$PATH"
-
-# ------------------------------------
-# Postgres
-# ------------------------------------
-export PATH="/Applications/Postgres.app/Contents/MacOS/bin:$PATH"
-
-# Adding local dir /bin dir to last in chain
-export PATH="./bin:$PATH"
+# This loads RVM into a shell session.
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # ------------------------------------
 # Git aliases.
@@ -172,18 +169,18 @@ function pretty() {
 }
 
 # Ask for confirmation when 'prod' is in a command string.
-prod_command_trap () {
-  if [[ $BASH_COMMAND == *prod* ]]
-  then
-    read -p "Are you sure you want to run this command on prod [Y/n]? " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-      echo -e "\nRunning command \"$BASH_COMMAND\" \n"
-    else
-      echo -e "\nCommand was not run.\n"
-      return 1
-    fi
-  fi
-}
-shopt -s extdebug
-trap prod_command_trap DEBUG
+# prod_command_trap () {
+#   if [[ $BASH_COMMAND =~ "prod" ]]
+#   then
+#     read -p "Are you sure you want to run this command on prod [Y/n]? " -n 1 -r
+#     if [[ $REPLY =~ ^[Yy]$ ]]
+#     then
+#       echo -e "\nRunning command \"$BASH_COMMAND\" \n"
+#     else
+#       echo -e "\nCommand was not run.\n"
+#       return 1
+#     fi
+#   fi
+# }
+
+# trap prod_command_trap DEBUG
