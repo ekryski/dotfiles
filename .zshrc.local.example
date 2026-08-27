@@ -1,0 +1,35 @@
+# Copy to ~/.zshrc.local and fill in. This file is NEVER committed --
+# ~/.zshrc sources it last, so anything here overrides the rest of the config.
+#
+# Prefer pulling secrets from 1Password over pasting them here:
+#
+#   export NPM_TOKEN="$(op read 'op://Private/npm/token')"
+#
+# That costs a few hundred milliseconds per shell and needs the 1Password app
+# unlocked, so a plain export is a reasonable trade-off for low-value tokens.
+# For anything sensitive, use `op run -- <command>` at the point of use instead
+# of exporting it into every shell.
+
+# --- registries ----------------------------------------------------------
+# export NPM_TOKEN=""
+
+# --- github --------------------------------------------------------------
+# gh stores its own token in the keychain, so this is only needed for tools
+# that read GITHUB_TOKEN directly (changelog generators, some CI helpers).
+# export GITHUB_TOKEN=""
+
+# --- cloud ---------------------------------------------------------------
+# export AWS_PROFILE=""
+# export CLOUDFLARE_API_TOKEN=""
+
+# --- ai ------------------------------------------------------------------
+# export ANTHROPIC_API_KEY=""
+# export OPENAI_API_KEY=""
+
+# --- machine-specific paths ----------------------------------------------
+# export JAVA_HOME="$(/usr/libexec/java_home -v 21)"
+# path=("$HOME/.local/share/solana/install/active_release/bin" $path)
+# export PATH
+
+# --- work-only config ----------------------------------------------------
+# export SOME_INTERNAL_REGISTRY=""
