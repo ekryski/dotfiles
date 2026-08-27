@@ -1,44 +1,42 @@
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
+# Applied to every repository via core.excludesfile.
+#
+# Scope rule: this file is for cruft *your machine* creates, not for a
+# project's build output. Ignoring project directories globally (node_modules,
+# .vscode, .claude) silently hides files that some repos legitimately commit,
+# and the problem is invisible when it happens. Put those in the project's own
+# .gitignore instead.
 
-# Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# Logs and databases #
-######################
-*.log
-*.sql
-*.sqlite
-
-# OS generated files #
-######################
-*.DS_Store
-*.DS_Store?
-*.LSOverride
+# --- macOS ---------------------------------------------------------------
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
-Thumbs.db
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+Icon?
 
+# --- editor scratch files ------------------------------------------------
+*.swp
+*.swo
+*~
+.netrwhist
+tags
 
-# NodeJS
-######################
-node_modules/
-npm-debug.log
+# JetBrains writes per-user state here; nobody wants it in review.
+.idea/
+*.iml
+
+# --- local tooling state -------------------------------------------------
+.direnv/
+
+# --- secrets -------------------------------------------------------------
+# A safety net, not a strategy. A real secret should never reach a working tree.
+.env
+.env.local
+.env.*.local
+*.pem
+*.p12
