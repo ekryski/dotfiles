@@ -1,37 +1,119 @@
-[user]
-  name = Eric Kryski
-  email = e.kryski@gmail.com
+# Committed to a public repo -- no identity, no tokens.
+# Name, email and signing key live in ~/.gitconfig.local, written by the
+# mac-dev-playbook and included at the bottom of this file.
+
 [core]
-  editor = code
-  excludesfile = ~/.gitignore_global
+	excludesfile = ~/.gitignore_global
+	hooksPath = ~/.githooks
+	editor = cursor --wait
+	# Use delta for diffs when it's installed; git falls back to less if not.
+	pager = delta
+	# Preserve mtimes so build tools don't rebuild the world after a checkout.
+	fsmonitor = true
+	untrackedCache = true
+
+[init]
+	defaultBranch = main
+
 [color]
-  branch = auto
-  diff = auto
-  interactive = auto
-  status = auto
-[web]
-  browser = google-chrome
-[credential]
-  helper = osxkeychain
-[heroku]
-  account = personal
-[push]
-  default = current
+	ui = auto
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	# Follow the terminal's light/dark setting.
+	syntax-theme = ansi
+
 [merge]
-  tool = kdiff3
+	conflictstyle = zdiff3
+	tool = cursor
+
+[mergetool "cursor"]
+	cmd = cursor --wait --merge $LOCAL $REMOTE $BASE $MERGED
+	trustExitCode = true
+
 [diff]
-  tool = default-difftool
-[difftool "default-difftool"]
-  cmd = code --wait --diff $LOCAL $REMOTE
+	tool = cursor
+	colorMoved = default
+	# Detect renames across the whole tree, and be smarter about hunk headers.
+	algorithm = histogram
+	renames = copies
+
+[difftool "cursor"]
+	cmd = cursor --wait --diff $LOCAL $REMOTE
+
+[push]
+	default = current
+	# Create the upstream branch on first push instead of erroring.
+	autoSetupRemote = true
+	followTags = true
+
+[pull]
+	rebase = true
+
+[rebase]
+	autoStash = true
+	autoSquash = true
+	updateRefs = true
+
+[fetch]
+	prune = true
+	pruneTags = true
+
+[rerere]
+	# Remember how you resolved a conflict and reapply it next time.
+	enabled = true
+	autoupdate = true
+
+[branch]
+	sort = -committerdate
+
+[log]
+	date = iso
+
+[credential]
+	helper = osxkeychain
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
 [alias]
-  br = branch
-  c = commit
-  co = checkout
-  ca = commit -a
-  cm = commit -m
-  cam = commit -am
-  d = diff
-  dc = diff --cached
-  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  l = log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
-  st = status
+	st = status --short --branch
+	co = checkout
+	br = branch
+	ci = commit
+	amend = commit --amend --no-edit
+	unstage = reset HEAD --
+	last = log -1 HEAD --stat
+	lg = log --graph --abbrev-commit --date=relative \
+		--pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cr)%C(reset) %C(bold blue)<%an>%C(reset)'
+	# Branches you touched most recently, newest last.
+	recent = branch --sort=-committerdate --format='%(committerdate:relative)%09%(refname:short)'
+	# What am I about to push?
+	unpushed = log @{u}.. --oneline
+
+[maintenance]
+	auto = true
+
+# Machine-local identity and overrides. Written by the mac-dev-playbook.
+# Must come last so it can override anything above.
+[include]
+	path = ~/.gitconfig.local
