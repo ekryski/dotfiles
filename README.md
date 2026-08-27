@@ -100,6 +100,7 @@ Missing tools degrade gracefully — every integration is behind a
 | `zsh-benchmark [n]` | Time `n` shell startups |
 | `zsh-refresh-completions` | Clear the completion cache after upgrading a tool |
 | `killport 3000` | Kill whatever is holding a port |
+| `restart-camera` | Unwedge the FaceTime camera (black frame, "no camera found") |
 | `gcof` | Fuzzy-checkout a branch |
 | `prune-branches` | Delete every local branch already merged |
 | `mkcd foo/bar` | `mkdir -p` and `cd` |

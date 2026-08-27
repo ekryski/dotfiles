@@ -60,6 +60,27 @@ zsh-benchmark() {
   time (for _ in {1..$runs}; do zsh -i -c exit; done)
 }
 
+# Restart the camera stack. macOS sometimes leaves the FaceTime camera wedged --
+# a black frame, a green light with no picture, or "no connected camera" in an
+# app that plainly has one. These daemons are launchd-managed and respawn on
+# demand, so killing them is the fix.
+#
+# Note this is NOT the old `killall VDCAssistant` incantation; that binary was
+# removed from macOS years ago. The current stack is:
+#   appleh1Ncamerad  Apple Silicon ISP daemon, named per SoC generation
+#   cameracaptured   CoreMediaIO daemon that actually vends the device
+#   avconferenced    FaceTime / Continuity Camera, runs as you (no sudo)
+#
+# Quit whatever app is holding the camera first, otherwise it can grab the
+# wedged device again the moment the daemon comes back.
+restart-camera() {
+  # Both ISP daemon names are passed in one call so sudo prompts at most once.
+  # Only one exists on any given Mac, so "No matching processes" is expected.
+  sudo killall appleh13camerad appleh16camerad cameracaptured 2>/dev/null
+  killall avconferenced 2>/dev/null
+  print "camera daemons restarted -- reopen the app that was using it"
+}
+
 # Route local traffic over ethernet on networks without a proxy.
 route-add-local()    { sudo route add -net 10.0.0.0/8 -interface en0 }
 route-delete-local() { sudo route delete 10.0.0.0 }
