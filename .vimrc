@@ -1,52 +1,68 @@
-syntax on               " enable syntax highlighting
+" Minimal vim config. Cursor is the day-to-day editor; vim is for commit
+" messages, quick edits and remote shells, so this stays dependency-free.
+" (The old config called pathogen#infect() and loaded a `cobalt` colorscheme
+" that was never installed, which errored on every start.)
+
+set nocompatible
+syntax on
+filetype plugin indent on
+
+" --- ui ------------------------------------------------------------------
+set number              " line numbers
 set cursorline          " highlight the current line
-" set background=dark   " darker color scheme
-" set ruler             " show line number in bar
-set nobackup            " don't create pointless backup files; Use VCS instead
-set autoread            " watch for file changes
-set number              " show line numbers
-set showcmd             " show selection metadata
-set showmode            " show INSERT, VISUAL, etc. mode
-set showmatch           " show matching brackets
-set autoindent smartindent  " auto/smart indent
-set smarttab            " better backspace and tab functionality
-set scrolloff=5         " show at least 5 lines above/below
-filetype on             " enable filetype detection
-filetype indent on      " enable filetype-specific indenting
-filetype plugin on      " enable filetype-specific plugins
-colorscheme cobalt      " requires cobalt.vim to be in ~/.vim/colors
+set showcmd             " show the pending command
+set showmode
+set showmatch           " flash the matching bracket
+set scrolloff=5         " keep 5 lines of context around the cursor
+set laststatus=2        " always show the status line
+set ruler
+set colorcolumn=81      " visual guide at 80 characters
+set termguicolors       " 24-bit colour in modern terminals
+silent! colorscheme habamax   " ships with vim 9; silent! so vim 8 doesn't error
 
-" column-width visual indication
-let &colorcolumn=join(range(81,999),",")
-highlight ColorColumn ctermbg=235 guibg=#001D2F
+" --- editing -------------------------------------------------------------
+set autoindent smartindent
+set expandtab           " spaces, not tabs
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set smarttab
+set backspace=indent,eol,start
+set clipboard=unnamed   " yank straight to the macOS clipboard
 
-" tabs and indenting
-set autoindent          " auto indenting
-set smartindent         " smart indenting
-set expandtab           " spaces instead of tabs
-set tabstop=2           " 2 spaces for tabs
-set shiftwidth=2        " 2 spaces for indentation
+" --- search --------------------------------------------------------------
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase           " ...unless the search has a capital in it
 
-" bells
-set noerrorbells        " turn off audio bell
-set visualbell          " but leave on a visual bell
+" --- files ---------------------------------------------------------------
+set nobackup            " version control is the backup
+set nowritebackup
+set noswapfile
+set autoread            " reload files changed outside vim
+set undofile
+set undodir=~/.vim/undo
+silent! call mkdir(expand('~/.vim/undo'), 'p')
 
-" search
-set hlsearch            " highlighted search results
-set showmatch           " show matching bracket
+" --- behaviour -----------------------------------------------------------
+set noerrorbells
+set visualbell t_vb=
+set mouse=a
+set hidden              " allow switching away from a modified buffer
+set wildmenu
+set wildmode=longest:full,full
 
-" other
-set guioptions=aAace    " don't show scrollbar in MacVim
-call pathogen#infect()  " use pathogen
+" --- keys ----------------------------------------------------------------
+" Clear search highlighting.
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
+" Move by screen line, not file line, when a line wraps.
+nnoremap j gj
+nnoremap k gk
 
-" clipboard
-set clipboard=unnamed   " allow yy, etc. to interact with OS X clipboard
-
-" shortcuts
-map <F2> :NERDTreeToggle<CR>
-
-" remapped keys
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
+" --- filetypes -----------------------------------------------------------
+" Git wants the commit summary wrapped at 72.
+autocmd FileType gitcommit setlocal textwidth=72 colorcolumn=73 spell
+autocmd FileType markdown  setlocal textwidth=80 spell
+autocmd FileType python    setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd FileType go        setlocal noexpandtab

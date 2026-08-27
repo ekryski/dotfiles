@@ -1,9 +1,18 @@
-# Allow up/down autocompletion of commands from bash history.
-# From: coderwall.com/p/oqtj8w
+# readline config. zsh does not read this file -- it applies to bash and to
+# every tool that links readline (psql, irb, sqlite3, python's REPL).
+
+# Up/down search history for what you have already typed.
 "\e[A": history-search-backward
 "\e[B": history-search-forward
+
 set show-all-if-ambiguous on
 set completion-ignore-case on
+set completion-map-case on        # treat - and _ as equivalent
+set colored-stats on              # colour completions by file type
+set colored-completion-prefix on
+set mark-symlinked-directories on
+set bell-style none
+set skip-completed-text on
 
-# Uncomment to enable vi-like command line editing mode.
+# Uncomment for vi-style command line editing.
 # set editing-mode vi
