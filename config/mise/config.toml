@@ -1,0 +1,13 @@
+# Fallback mise configuration, symlinked to ~/.config/mise/config.toml.
+#
+# The mac-dev-playbook overwrites this file from templates/mise-config.toml.j2,
+# so treat `mise_tools` in the playbook's config.yml as the source of truth.
+# This copy exists so the dotfiles are usable on their own.
+
+[tools]
+node = "lts"
+ruby = "3.4"
+go = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node", "ruby", "go"]
