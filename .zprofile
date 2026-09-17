@@ -41,6 +41,7 @@ export PNPM_HOME="$HOME/Library/pnpm"
 path=(
   "$HOME/.local/bin"                          # uv tools and uv-managed pythons
   "$HOME/bin"                                 # personal scripts
+  "$HOME/.cargo/bin"                          # cargo install
   "$PNPM_HOME"
   "$GOPATH/bin"
   $path                                       # Homebrew, then the system
@@ -51,6 +52,7 @@ path=(
 # above but before the system, so /usr/bin/sqlite3 doesn't win.
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
   path+=(
+    "$HOMEBREW_PREFIX/opt/rustup/bin"         # rustc, cargo (rustup is keg-only)
     "$HOMEBREW_PREFIX/opt/postgresql@18/bin"  # psql, pg_dump, createdb
     "$HOMEBREW_PREFIX/opt/sqlite/bin"         # newer than the system sqlite3
   )
