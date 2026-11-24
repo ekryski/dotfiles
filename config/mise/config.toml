@@ -1,8 +1,13 @@
-# Fallback mise configuration, symlinked to ~/.config/mise/config.toml.
+# Machine-wide mise defaults, linked to ~/.config/mise/config.toml by the
+# mac-dev-playbook, which sets the [tools] keys from `mise_tools` (its
+# config.yml is the source of truth) and keeps them at the newest patch with
+# `mise upgrade`. Ranges, not exact versions, so patches land on their own; a
+# project that needs something else sets it in its own mise.toml.
 #
-# The mac-dev-playbook overwrites this file from templates/mise-config.toml.j2,
-# so treat `mise_tools` in the playbook's config.yml as the source of truth.
-# This copy exists so the dotfiles are usable on their own.
+# Only your defaults live here. Other tools keep their own files beside it:
+# the Waffuru ops bootstrap writes ~/.config/mise/conf.d/waffuru.toml (workspace
+# trust, gh, wpantry) and ~/waffuru/mise.toml. Don't set trusted_config_paths
+# here: a list in this file replaces conf.d's instead of adding to it.
 
 [tools]
 node = "lts"
