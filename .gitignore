@@ -1,0 +1,3 @@
+# Ghostty writes its theme picker's choice here (auto/theme.ghostty) through
+# the linked config folder; the theme itself is set in config/ghostty/config.
+config/ghostty/auto/
