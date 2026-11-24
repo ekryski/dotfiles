@@ -9,8 +9,9 @@ font-size = 14
 font-thicken = true
 
 # --- theme ---------------------------------------------------------------
-# Follows the macOS appearance setting.
-theme = light:GruvboxLight,dark:GruvboxDarkHard
+# Names must match Ghostty's bundled theme files (spaces included):
+# `ghostty +list-themes`.
+theme = Afterglow
 background-opacity = 0.97
 background-blur-radius = 20
 
